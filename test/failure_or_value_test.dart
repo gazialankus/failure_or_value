@@ -2,7 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:failure_or_value/failure_or_value.dart';
 
-class Failure {}
+class Failure {
+  final Exception? e;
+  final StackTrace? st;
+
+  Failure([this.e, this.st]);
+}
 
 void main() {
   group('Basic functionalities', () {
@@ -12,6 +17,24 @@ void main() {
     Either<Failure, int> getNumber() {
       return success(10);
     }
+
+    void voidFunc() {}
+    Either<Failure, void> failureOrVoid() {
+      try {
+        final r = voidFunc();
+        return success(r);
+      } on Exception catch(e, st) {
+        return failure(Failure(e, st));
+      }
+    }
+
+    test('failure or void test', () {
+      final failureOrSuccess = failureOrVoid();
+      failureOrSuccess.fold(
+        (failure) => null,
+        (value) => null,
+      );
+    });
 
     test('isFailure and isSuccess are working', () {
       final failureOrSuccess1 = getFailure();
