@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:failure_or_value/failure_or_value.dart';
@@ -30,10 +32,11 @@ void main() {
 
     test('failure or void test', () {
       final failureOrSuccess = failureOrVoid();
-      failureOrSuccess.fold(
-        (failure) => null,
-        (value) => null,
+      final e = failureOrSuccess.fold(
+        (failure) => false,
+        (value) => true,
       );
+      expect(true, e);
     });
 
     test('isFailure and isSuccess are working', () {
