@@ -22,7 +22,7 @@ Either<Failure, int> getNumber() {
   return success(10);
 }
 
-void f() async {
+void test() async {
   final failureOrSuccess = getFailure();
   assert(failureOrSuccess.isFailure() == true);
   
@@ -31,13 +31,36 @@ void f() async {
       (value) => null, // do something with value,
   );
 
-  // Same with fold method but returns a future
+  // This time returns a future
   final state = await failureOrSuccess.fold(
         (failure) async {
           await service.updateSomethingInServer();
           return State.failure(failure);
         },
         (value) async => State.success(value),
+  );
+}
+
+// Example for creating Failure objects in catch bloc and sending "Exception" and "Stack Trace".
+Future<Either<Failure, User>> getUser(String id) async {
+  try {
+    final user = await _userService.fetchUser(id);
+    return success(user);
+  } on PlatformException catch(e, st) {
+    return failure(Failure.platform(e, st));
+  } on Exception catch(e, st) {
+    return failure(Failure.any(e, st));
+  }
+}
+
+void useGetUserFunction() async {
+  final failureOrSuccess = await getUser("12345");
+  failureOrSuccess.fold(
+      (failure) {
+        print(failure.e);
+        print(failure.st);
+      },
+      (value) => print(value),
   );
 }
 ```
