@@ -32,10 +32,10 @@ void f() async {
   );
 
   // Same with fold method but returns a future
-  final state = await failureOrSuccess.asyncFold(
+  final state = await failureOrSuccess.fold(
         (failure) async {
           await service.updateSomethingInServer();
-          State.failure(failure);
+          return State.failure(failure);
         },
         (value) async => State.success(value),
   );
