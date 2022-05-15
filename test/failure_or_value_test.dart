@@ -36,20 +36,5 @@ void main() {
       );
       expect('Success', result2);
     });
-
-    test('asyncFold is working', () async {
-      final failureOrSuccess1 = getFailure();
-      final failureOrSuccess2 = getNumber();
-      final result1 = await failureOrSuccess1.asyncFold(
-        (failure) async => 'Failure',
-        (value) async => 'Success',
-      );
-      expect('Failure', result1);
-      final result2 = await failureOrSuccess2.asyncFold(
-        (failure) async => 'Failure',
-        (value) async => 'Success',
-      );
-      expect('Success', result2);
-    });
   });
 }

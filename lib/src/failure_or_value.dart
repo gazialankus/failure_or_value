@@ -14,19 +14,9 @@ class Either<T, K> {
     return _failure != null;
   }
 
-  dynamic fold(
-    Function(T failure) onFailure,
-    Function(K value) onSuccess,
-  ) {
-    if (isFailure()) {
-      return onFailure(_failure as T);
-    }
-    return onSuccess(_value as K);
-  }
-
-  Future asyncFold(
-    Future Function(T failure) onFailure,
-    Future Function(K value) onSuccess,
+  B fold<B>(
+    B Function(T failure) onFailure,
+    B Function(K value) onSuccess,
   ) {
     if (isFailure()) {
       return onFailure(_failure as T);
